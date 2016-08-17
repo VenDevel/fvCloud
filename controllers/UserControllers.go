@@ -18,6 +18,10 @@ func (this *UserControllers) LoginPage() {
 	this.TplName = "login.html"
 }
 
+func (this *UserControllers) RegisterPage() {
+	this.TplName = "register.html"
+}
+
 func (this *UserControllers) Login() {
 	//this.WriteData(1000, "test", test)
 	body := this.GetRequestBody()
