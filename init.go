@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"fvCloud/utils"
+	"fvCloud/utils/dataCenter"
 )
 
 func init() {
 	ReadfvCouldConf()
-
 }
 
 func ReadfvCouldConf() {
@@ -19,8 +19,9 @@ func ReadfvCouldConf() {
 	if err != nil {
 		return
 	}
+	fmt.Println(mp)
 
-	datacenter := utils.GetInstance()
+	datacenter := dataCenter.GetInstance()
 	datacenter.Add("fvConf", mp)
 	fmt.Println(mp, datacenter)
 }
