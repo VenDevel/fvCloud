@@ -59,7 +59,6 @@ func newDataCenter() *dataPoll {
 }
 
 func GetInstance() *dataPoll {
-
 	mutex.Lock()
 	defer mutex.Unlock()
 	if _dataCenter == nil {
@@ -92,14 +91,26 @@ func (this *dataPoll) Add(key string, value interface{}) error { //增加因此�
 func (this *dataPoll) Delete(key string) {
 	mutex.Lock()
 	defer mutex.Unlock()
-	delete(this.data, key)
+	if !_dataCenter.isExpired(key) {
+		delete(this.data, key)
+	}
 }
 
-func (this *dataPoll) Get(key string) (interface{}, bool) {
+func (this *dataPoll) Get(key string) (interface{}, error) {
 	mutex.Lock()
 	defer mutex.Unlock()
+
+	if _dataCenter.isExpired(key) {
+		return nil, fmt.Errorf("not find " + key)
+	}
 	value, ok := this.data[key]
-	return value.body, ok
+	var err error
+	if ok {
+		err = nil
+	} else {
+		err = fmt.Errorf("not find " + key)
+	}
+	return value.body, err
 }
 
 func (this *dataPoll) Set(key string, value interface{}) { //set 如果没有就会添加 如果有就会覆盖
@@ -116,6 +127,8 @@ func (this *dataPoll) SetKeyAndInfo(key string, value interface{}, g int64) { //
 }
 
 func (this *dataPoll) clearDataCenter() {
+	mutex.Lock()
+	defer mutex.Unlock()
 	now_time := time.Now().UnixNano() // 不需要太精确只是说定期清理而已
 	for k, v := range this.data {
 		fmt.Println(k, v)
@@ -125,10 +138,16 @@ func (this *dataPoll) clearDataCenter() {
 	}
 }
 
-func (this *dataPoll) isExpired(key string) (bool, error) {
+func (this *dataPoll) isExpired(key string) bool { //过期或者是没有这个值
 	data, ok := this.data[key]
 	if !ok {
-		return false, fmt.Errorf("not key")
+		log.Println("not " + key + "key")
+		return true
 	}
-	return data.gtime <= time.Now().UnixNano(), nil
+	return data.gtime > time.Now().UnixNano()
+}
+
+func (this *dataPoll) isKey(key string) bool { //过期或者是没有这个值
+	_, ok := this.data[key]
+	return ok
 }
