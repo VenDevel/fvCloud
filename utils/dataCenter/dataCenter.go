@@ -31,6 +31,7 @@ const (
 	Day               = 24 * Hour          //天
 )
 
+// @Title 数据存放处
 type dataPoll struct {
 	data map[string]*dataCenterKeyInfo
 }
