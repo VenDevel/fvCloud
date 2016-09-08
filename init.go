@@ -2,12 +2,15 @@ package main
 
 import (
 	"fmt"
+	"fvCloud/sqlite"
 	"fvCloud/utils"
 	"fvCloud/utils/dataCenter"
 )
 
 func init() {
 	ReadfvCouldConf()
+	sqlite.RegisterDB()
+
 }
 
 func ReadfvCouldConf() {
