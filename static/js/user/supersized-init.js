@@ -29,6 +29,21 @@ jQuery(function($){
 
 });
 
-function login_web(){
-    alert("aaa")
+function web_login(btn){
+    var account = $("#account").val()
+    var password = $("#password").val()
+    var account_class = $("#account").attr("class")
+    var password_calss = $("#password").attr("class")
+
+
+    if (account_class != "username valid" && password_calss != "password valid"){
+        return 
+    }
+
+    post_login({account:account,password:password})
+
+}
+
+function post_login(params){
+
 }

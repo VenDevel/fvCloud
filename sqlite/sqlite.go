@@ -1,14 +1,14 @@
 package sqlite
 
 import (
-	"fmt"
+	//"fmt"
 	"fvCloud/models"
 	"github.com/Unknwon/com"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/mattn/go-sqlite3"
 	"os"
 	"path"
-	"time"
+	//"time"
 )
 
 const (
@@ -18,17 +18,6 @@ const (
 	_SQLITE3_DRIVER = "sqlite3"
 )
 
-// 分类
-type Category struct {
-	Id              int64
-	Title           string
-	Created         time.Time `orm:"index"`
-	Views           int64     `orm:"index"`
-	TopicTime       time.Time `orm:"index"`
-	TopicCount      int64
-	TopicLastUserId int64
-}
-
 func RegisterDB() {
 	// 检查数据库文件
 	if !com.IsExist(_DB_NAME) {
@@ -37,7 +26,7 @@ func RegisterDB() {
 	}
 
 	// 注册模型
-	orm.RegisterModel(new(models.User), new(Category))
+	orm.RegisterModel(new(models.User))
 
 	// 注册驱动（“sqlite3” 属于默认注册，此处代码可省略）
 	orm.RegisterDriver(_SQLITE3_DRIVER, orm.DRSqlite)
@@ -45,27 +34,5 @@ func RegisterDB() {
 	orm.RegisterDataBase("default", _SQLITE3_DRIVER, _DB_NAME, 10)
 
 	orm.RunSyncdb("default", false, true)
-}
-
-func AddCategory(name string) error {
-	o := orm.NewOrm()
-
-	cate := &Category{Title: name}
-
-	// 查询数据
-	qs := o.QueryTable("category")
-	err := qs.Filter("title", name).One(cate)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	// 插入数据
-	_, err = o.Insert(cate)
-	if err != nil {
-		fmt.Println(err.Error())
-		return err
-	}
-
-	return nil
+	orm.Debug = true
 }

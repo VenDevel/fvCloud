@@ -2,11 +2,11 @@ package main
 
 import (
 	_ "fvCloud/routers"
-	"fvCloud/sqlite"
+	_ "fvCloud/sqlite"
 	"github.com/astaxie/beego"
 )
 
 func main() {
-	sqlite.AddCategory("aafads")
+	//sqlite.AddUser("admin", "admin", "admin", 1)
 	beego.Run()
 }
