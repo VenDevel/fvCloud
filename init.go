@@ -25,6 +25,10 @@ func ReadfvCouldConf() {
 	fmt.Println(mp)
 
 	datacenter := dataCenter.GetInstance()
+	dtstr, ok := mp["dataCenterUpdataTime"]
+	if ok {
+		datacenter.SetDataCenterClearCycle(dataCenter.Second * int64(dtstr.(float64)))
+	}
 	datacenter.Add("fvConf", mp)
 	fmt.Println(mp, datacenter)
 }

@@ -35,7 +35,6 @@ function web_login(btn){
     var account_class = $("#account").attr("class")
     var password_calss = $("#password").attr("class")
 
-
     if (account_class != "username valid" && password_calss != "password valid"){
         return 
     }
@@ -45,5 +44,21 @@ function web_login(btn){
 }
 
 function post_login(params){
+        $.ajax({
+        type: "post",
+        url:"/login.html",
+        async: false,
+        data:params,
+        dataType: "json",
+        success: function(data) {
+            console.log(data)
+            if (data.code != 1000){
+                alert("登录失败,请重新登录");
+                
+            }
+        }
+    })
 
 }
+
+

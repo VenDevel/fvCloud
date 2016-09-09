@@ -15,8 +15,6 @@ var _dataCenter *dataPoll
 
 var mutex sync.Mutex
 
-var dataCenterClearCycle time.Duration = 30 * time.Second
-
 func init() {
 	GetInstance()
 }
@@ -31,6 +29,8 @@ const (
 	Day               = 24 * Hour          //天
 )
 
+var dataCenterClearCycle int64 = 30 * Second
+
 // @Title 数据存放处
 type dataPoll struct {
 	data map[string]*dataCenterKeyInfo
@@ -40,8 +40,7 @@ type dataPoll struct {
 func (this *dataPoll) task() {
 	for {
 		log.Println("start utils dataCenter task")
-
-		time.Sleep(dataCenterClearCycle) //10秒钟让放出去执行任务
+		time.Sleep(time.Duration(dataCenterClearCycle)) //10秒钟让放出去执行任务
 		_dataCenter.clearDataCenter()
 	}
 }
@@ -70,10 +69,11 @@ func GetInstance() *dataPoll {
 	return _dataCenter
 }
 
-func (this *dataPoll) SetDataCenterClearCycle(dt time.Duration) *dataPoll {
+func (this *dataPoll) SetDataCenterClearCycle(dt int64) *dataPoll {
 	mutex.Lock()
 	defer mutex.Unlock()
 	dataCenterClearCycle = dt
+	fmt.Println("dataCenter Clear time setting :", dt)
 	return this
 }
 

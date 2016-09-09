@@ -31,6 +31,17 @@ func (this *UserControllers) Login() {
 	// this.Data["Website"] = "beego.me"
 	// this.Data["Email"] = "astaxie@gmail.com"
 	// this.TplName = "index.tpl"
+
+	account := this.GetRequestParam("account")
+	password := this.GetRequestParam("password")
+	test := this.GetRequestParam("11111")
+
+	fmt.Println("a----------")
+
+	fmt.Println(account)
+	fmt.Println(password)
+	fmt.Println(test)
+
 	fmt.Println("a----------")
 	this.WriteData(1000, "test", 1)
 }
