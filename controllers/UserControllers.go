@@ -43,5 +43,14 @@ func (this *UserControllers) Login() {
 	fmt.Println(test)
 
 	fmt.Println("a----------")
+	mp := this.GetRequestParams()
+	by := this.GetRequestBody()
+	qusrt := this.Query("account")
+	fmt.Println("b----------")
+	fmt.Println(mp)
+	fmt.Println(string(by))
+	fmt.Println(qusrt)
+	fmt.Println("b----------")
+
 	this.WriteData(1000, "test", 1)
 }

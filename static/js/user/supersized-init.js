@@ -54,7 +54,6 @@ function post_login(params){
             console.log(data)
             if (data.code != 1000){
                 alert("登录失败,请重新登录");
-                
             }
         }
     })

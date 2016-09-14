@@ -7,6 +7,7 @@ import (
 	"time"
 )
 
+//@Title 添加账号
 func AddUser(account string, password string, nickname string, permissions int64) error {
 	o := orm.NewOrm()
 	tm := time.Now().UnixNano()
@@ -16,9 +17,8 @@ func AddUser(account string, password string, nickname string, permissions int64
 	qs := o.QueryTable("user")
 	err := qs.Filter("account", account).One(user)
 	if err == nil {
-		return fmt.Errorf("existence account") //不能添加同用户名的
+		return fmt.Errorf("existence account") //不能添加同账号的
 	}
-
 	_, err = o.Insert(user)
 	if err != nil {
 		fmt.Println(err.Error())
