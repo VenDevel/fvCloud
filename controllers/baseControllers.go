@@ -31,8 +31,15 @@ func (this *baseController) GetRequestBody() []byte {
 	return this.Ctx.Input.RequestBody
 }
 
-func (this *baseController) GetRequestBodyToJson(object interface{}) error {
-	return json.Unmarshal(this.Ctx.Input.RequestBody, &object)
+func (this *baseController) GetRequestJsonToObject(object interface{}) (interface{}, error) {
+	err := json.Unmarshal(this.Ctx.Input.RequestBody, &object)
+	return object, err
+}
+
+func (this *baseController) GetRequestJsonToMap() (map[string]interface{}, error) {
+	m := make(map[string]interface{}, 0)
+	err := json.Unmarshal(this.Ctx.Input.RequestBody, &m)
+	return m, err
 }
 
 func (this *baseController) GetRequestParam(key string) string {

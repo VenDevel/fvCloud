@@ -26,3 +26,28 @@ func AddUser(account string, password string, nickname string, permissions int64
 	}
 	return nil
 }
+
+func GetUser() {
+	user := &models.User{}
+	o := orm.NewOrm()
+	qs := o.QueryTable("user")
+	err := qs.Filter("account", "aaaaa").One(user)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+
+	fmt.Println(user)
+
+}
+
+func GetUserByAccount(account string) (*models.User, error) {
+	user := &models.User{}
+	o := orm.NewOrm()
+	qs := o.QueryTable("user")
+	err := qs.Filter("account", account).One(user)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil, err
+	}
+	return user, nil
+}

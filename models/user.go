@@ -10,3 +10,9 @@ type User struct {
 	LastLoginTime int64
 	Permissions   int64
 }
+
+type AddUserInfo struct {
+	Account  string
+	Password string
+	NickName string
+}

@@ -2,6 +2,8 @@ package controllers
 
 import (
 	"fmt"
+	"fvCloud/models"
+	"fvCloud/sqlite"
 )
 
 type UserControllers struct {
@@ -22,7 +24,56 @@ func (this *UserControllers) RegisterPage() {
 	this.TplName = "register.html"
 }
 
+func (this *UserControllers) Register() {
+	user := &models.AddUserInfo{}
+	_, err := this.GetRequestJsonToObject(user)
+	if err != nil {
+		this.WriteData(-1, err.Error(), "")
+		return
+	}
+	if user.Account == "" || user.Password == "" || user.NickName == "" {
+		this.WriteData(-2, "参数错误", "")
+		return
+	}
+	err = sqlite.AddUser(user.Account, user.Password, user.NickName, 1)
+	if err != nil {
+		this.WriteData(-3, err.Error(), "")
+		return
+	}
+	this.WriteData(1000, "SUCCESS", "")
+}
+
 func (this *UserControllers) Login() {
+	user := &models.AddUserInfo{}
+	_, err := this.GetRequestJsonToObject(user)
+	if err != nil {
+		this.WriteData(-1, err.Error(), "")
+		return
+	}
+	if user.Account == "" || user.Password == "" {
+		this.WriteData(-2, "参数错误", "")
+		return
+	}
+	us, err := sqlite.GetUserByAccount(user.Account)
+	if err != nil {
+		fmt.Println(err.Error())
+		this.WriteData(-3, "", "") //一般是账号不存在
+		return
+	}
+
+	if us.Password != user.Password {
+		this.WriteData(-4, "密码不正确", "")
+		return
+	}
+
+	this.WriteData(1000, "SUCCESS", "")
+}
+
+func (this *UserControllers) GTest() {
+
+}
+
+func (this *UserControllers) PTest() {
 	//this.WriteData(1000, "test", test)
 	// body := this.GetRequestBody()
 	// fmt.Println(this.Query("password"))
